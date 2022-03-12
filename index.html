@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Minting Page</title>
+    <title>PayPerDay</title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
     <!-- Core theme CSS (includes Bootstrap)-->
@@ -17,10 +17,13 @@
     <div class="d-flex" id="wrapper">
         <!-- Sidebar-->
         <div class="border-end bg-white" id="sidebar-wrapper">
-            <div class="sidebar-heading border-bottom bg-light">Minting Page</div>
+            <div class="sidebar-heading border-bottom bg-light">PayPerDay</div>
             <div class="list-group list-group-flush">
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" id="ownerSection">Owner</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" id="userSection">User</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" id="adminSection">Admin</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3"
+                    id="employeeSection">Employee</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3"
+                    id="companySection">Company</a>
             </div>
         </div>
         <div id="page-content-wrapper">
@@ -29,26 +32,73 @@
                     <button class="btn btn-primary" id="connect">Connect</button>
                 </div>
             </nav>
-            <div id="ownerPage" style="display:none; text-align: center">
+            <div id="adminPage" style="display:none; text-align: center">
                 <!-- Page content-->
                 <div class="container-fluid">
-                    <h1 class="mt-4">Owner</h1><hr>
-                    <h2 class="mt-4">Add To Whitelist</h2>
+                    <h1 class="mt-4">Admin</h1>
+                    <h2 class="mt-4">Add Company</h2>
                     <hr>
+
+                    <label for="companyName">Name:</label><br>
+                    <input type="text" id="companyName" name="companyName">
+                    <hr>
+
                     <label for="address">Address:</label><br>
-                    <input type="text" id="address" name="address">
+                    <input type="text" id="companyAddress" name="companyAddress">
                     <hr>
-                    <label for="amount">Amount:</label><br>
-                    <input type="text" id="amount" name="amount">
+
+                    <button id="addCompanyButton">Submit</button>
                     <hr>
-                    <button id="submit">Submit</button>
+                    <h2 class="mt-4">Companies List</h2>
+                    <hr>
+                    <button id="showCompaniesList">Show List</button>
+                    <hr>
+                    <ul id="companiesList"></ul>
                 </div>
             </div>
-            <div id="userPage" style="display:none; text-align: center">
+            <div id="employeePage" style="display:none; text-align: center">
                 <!-- Page content-->
                 <div class="container-fluid">
-                    <h1 class="mt-4">User</h1><hr>
-                    <button id="claim">Claim</button>
+                    <label for="days">Add Days :</label><br>
+                    <input type="text" id="days" name="days">
+                    <hr>
+                    <button id="addDays">Submit</button>
+                    <hr>
+                    <button id="claim">Claim Salary</button>
+                </div>
+            </div>
+            <div id="companyPage" style="display:none; text-align: center">
+                <!-- Page content-->
+                <div class="container-fluid">
+                    <h1 class="mt-4">Company</h1>
+                    <hr>
+                    <h2 class="mt-4">Add Employee</h2>
+                    <hr>
+                    <label for="wallet">Wallet : </label><br>
+                    <input type="text" id="wallet" name="wallet">
+                    
+                    <hr>
+
+                    <label for="fname">First name:</label><br>
+                    <input type="text" id="fname" name="fname">
+                    <hr>
+
+                    <label for="lname">Last name:</label><br>
+                    <input type="text" id="lname" name="lname">
+                    <hr>
+
+                    <label for="salary">Salary:</label><br>
+                    <input type="text" id="salary" name="salary">
+                    <hr>
+
+                    <button id="addEmployeeButton">Submit</button>
+                    <hr>
+
+                    <h2 class="mt-4">Employees List</h2>
+                    <hr>
+                    <button id="showListEmployees">Show List</button>
+                    <hr>
+                    <ul id="employeesList"></ul>
                 </div>
             </div>
         </div>
@@ -76,570 +126,296 @@
         // For this, you need the account signer...
         const signer = provider.getSigner();
 
-        const contractABI = [
-            {
-                "inputs": [],
-                "stateMutability": "nonpayable",
-                "type": "constructor"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
-                    {
-                        "indexed": true,
-                        "internalType": "address",
-                        "name": "owner",
-                        "type": "address"
-                    },
-                    {
-                        "indexed": true,
-                        "internalType": "address",
-                        "name": "approved",
-                        "type": "address"
-                    },
-                    {
-                        "indexed": true,
-                        "internalType": "uint256",
-                        "name": "tokenId",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "Approval",
-                "type": "event"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
-                    {
-                        "indexed": true,
-                        "internalType": "address",
-                        "name": "owner",
-                        "type": "address"
-                    },
-                    {
-                        "indexed": true,
-                        "internalType": "address",
-                        "name": "operator",
-                        "type": "address"
-                    },
-                    {
-                        "indexed": false,
-                        "internalType": "bool",
-                        "name": "approved",
-                        "type": "bool"
-                    }
-                ],
-                "name": "ApprovalForAll",
-                "type": "event"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
-                    {
-                        "indexed": true,
-                        "internalType": "address",
-                        "name": "previousOwner",
-                        "type": "address"
-                    },
-                    {
-                        "indexed": true,
-                        "internalType": "address",
-                        "name": "newOwner",
-                        "type": "address"
-                    }
-                ],
-                "name": "OwnershipTransferred",
-                "type": "event"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
-                    {
-                        "indexed": true,
-                        "internalType": "address",
-                        "name": "from",
-                        "type": "address"
-                    },
-                    {
-                        "indexed": true,
-                        "internalType": "address",
-                        "name": "to",
-                        "type": "address"
-                    },
-                    {
-                        "indexed": true,
-                        "internalType": "uint256",
-                        "name": "tokenId",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "Transfer",
-                "type": "event"
-            },
-            {
-                "inputs": [],
-                "name": "MAX_SUPPLY",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "address",
-                        "name": "",
-                        "type": "address"
-                    }
-                ],
-                "name": "_whitelisted",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "address[]",
-                        "name": "wallets",
-                        "type": "address[]"
-                    },
-                    {
-                        "internalType": "uint256[]",
-                        "name": "amounts",
-                        "type": "uint256[]"
-                    }
-                ],
-                "name": "addToWhitelist",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "address",
-                        "name": "to",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "tokenId",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "approve",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "address",
-                        "name": "owner",
-                        "type": "address"
-                    }
-                ],
-                "name": "balanceOf",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "tokenId",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "getApproved",
-                "outputs": [
-                    {
-                        "internalType": "address",
-                        "name": "",
-                        "type": "address"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "address",
-                        "name": "owner",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "address",
-                        "name": "operator",
-                        "type": "address"
-                    }
-                ],
-                "name": "isApprovedForAll",
-                "outputs": [
-                    {
-                        "internalType": "bool",
-                        "name": "",
-                        "type": "bool"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "name",
-                "outputs": [
-                    {
-                        "internalType": "string",
-                        "name": "",
-                        "type": "string"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "owner",
-                "outputs": [
-                    {
-                        "internalType": "address",
-                        "name": "",
-                        "type": "address"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "tokenId",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "ownerOf",
-                "outputs": [
-                    {
-                        "internalType": "address",
-                        "name": "",
-                        "type": "address"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "price",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "renounceOwnership",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "address",
-                        "name": "from",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "address",
-                        "name": "to",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "tokenId",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "safeTransferFrom",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "address",
-                        "name": "from",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "address",
-                        "name": "to",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "tokenId",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "bytes",
-                        "name": "_data",
-                        "type": "bytes"
-                    }
-                ],
-                "name": "safeTransferFrom",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "saleMint",
-                "outputs": [],
-                "stateMutability": "payable",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "address",
-                        "name": "operator",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "bool",
-                        "name": "approved",
-                        "type": "bool"
-                    }
-                ],
-                "name": "setApprovalForAll",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "_price",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "setPrice",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "bytes4",
-                        "name": "interfaceId",
-                        "type": "bytes4"
-                    }
-                ],
-                "name": "supportsInterface",
-                "outputs": [
-                    {
-                        "internalType": "bool",
-                        "name": "",
-                        "type": "bool"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "symbol",
-                "outputs": [
-                    {
-                        "internalType": "string",
-                        "name": "",
-                        "type": "string"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "index",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "tokenByIndex",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "address",
-                        "name": "owner",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "index",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "tokenOfOwnerByIndex",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "tokenId",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "tokenURI",
-                "outputs": [
-                    {
-                        "internalType": "string",
-                        "name": "",
-                        "type": "string"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "totalSupply",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "address",
-                        "name": "from",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "address",
-                        "name": "to",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "tokenId",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "transferFrom",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "address",
-                        "name": "newOwner",
-                        "type": "address"
-                    }
-                ],
-                "name": "transferOwnership",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            }
-        ]
+        const contractABI =
+            [
+                {
+                    "inputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "amount",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "addDays",
+                    "outputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [],
+                    "name": "companiesCounter",
+                    "outputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "_companiesList",
+                    "outputs": [
+                        {
+                            "internalType": "address",
+                            "name": "",
+                            "type": "address"
+                        }
+                    ],
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "address",
+                            "name": "",
+                            "type": "address"
+                        }
+                    ],
+                    "name": "_companiesInfo",
+                    "outputs": [
+                        {
+                            "internalType": "string",
+                            "name": "name",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "address",
+                            "name": "wallet",
+                            "type": "address"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "employees",
+                            "type": "uint256"
+                        }
+                    ],
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "address",
+                            "name": "",
+                            "type": "address"
+                        }
+                    ],
+                    "name": "_employeesInfo",
+                    "outputs": [
+                        {
+                            "internalType": "address",
+                            "name": "company",
+                            "type": "address"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "firstName",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "lastName",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "salary",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "startDate",
+                            "type": "uint256"
+                        }
+                    ],
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "address",
+                            "name": "wallet",
+                            "type": "address"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "name",
+                            "type": "string"
+                        }
+                    ],
+                    "name": "addCompany",
+                    "outputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "address",
+                            "name": "wallet",
+                            "type": "address"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "firstName",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "lastName",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "salary",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "addEmployee",
+                    "outputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "address",
+                            "name": "account",
+                            "type": "address"
+                        }
+                    ],
+                    "name": "balanceOf",
+                    "outputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "inputs": [],
+                    "name": "claimSalary",
+                    "outputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "address",
+                            "name": "spender",
+                            "type": "address"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "addedValue",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "increaseAllowance",
+                    "outputs": [
+                        {
+                            "internalType": "bool",
+                            "name": "",
+                            "type": "bool"
+                        }
+                    ],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "address",
+                            "name": "",
+                            "type": "address"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "_employeesList",
+                    "outputs": [
+                        {
+                            "internalType": "address",
+                            "name": "company",
+                            "type": "address"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "firstName",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "lastName",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "salary",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "startDate",
+                            "type": "uint256"
+                        }
+                    ],
+                    "stateMutability": "view",
+                    "type": "function"
+                }
+            ]
 
-        const contractAddress = "0xfB20374ede8c1E5A99715abCd932Aba7Db9D5E40";
+        const contractAddress = "0x675Ff84eF835d902a08CD49A2e94556974ab6093";
 
-        const contractSetter = new ethers.Contract(contractAddress, contractABI, signer);
         const contractGetter = new ethers.Contract(contractAddress, contractABI, provider);
+        const contractSetter = new ethers.Contract(contractAddress, contractABI, signer);
 
-        const claim = document.getElementById("claim");
-        const amount = document.getElementById("amount");
-        const submit = document.getElementById("submit");        
-        const address = document.getElementById("address");        
-        const userPage = document.getElementById("userPage");
-        const ownerPage = document.getElementById("ownerPage");
+        const adminPage = document.getElementById("adminPage");
+        const employeePage = document.getElementById("employeePage");
+        const companyPage = document.getElementById("companyPage");
+        const adminSection = document.getElementById("adminSection");
+        const employeeSection = document.getElementById("employeeSection");
+        const companySection = document.getElementById("companySection");
         const connectButton = document.getElementById("connect");
-        const userSection = document.getElementById("userSection");
-        const ownerSection = document.getElementById("ownerSection");
 
-        ownerSection.addEventListener("click", () => {
-            userPage.style.display = "none";
-            ownerPage.style.display = "block";
+        adminSection.addEventListener("click", () => {
+            employeePage.style.display = "none";
+            adminPage.style.display = "block";
+            companyPage.style.display = "none";
         })
 
-        userSection.addEventListener("click", () => {
-            ownerPage.style.display = "none";
-            userPage.style.display = "block";
+        employeeSection.addEventListener("click", () => {
+            adminPage.style.display = "none";
+            employeePage.style.display = "block";
+            companyPage.style.display = "none";
+        })
+
+        companySection.addEventListener("click", () => {
+            adminPage.style.display = "none";
+            employeePage.style.display = "none";
+            companyPage.style.display = "block";
         })
 
         connectButton.addEventListener("click", () => {
             connect();
-        })
-
-        submit.addEventListener("click", () => {
-            addWhitelisted();
-        })
-
-        claim.addEventListener("click", () => {
-            buy();
         })
 
         async function connect() {
@@ -648,52 +424,166 @@
             connectButton.innerText = account;
         }
 
-        async function buy() {
-            let addr = await signer.getAddress();
-            let check = await checkWhitelisted(addr);
-            if (check > 0) {
-                let price = await checkPrice();
-                let value = price * check;
-                let overrides = {
-                    "from": addr,
-                    "value": ethers.utils.parseEther(`${value}`)
-                };
-                let tx = await contractSetter.saleMint(overrides);
-                let receipt = await tx.wait();
-                console.log(receipt.transactionHash);
-                alert("Transaction mined : " + receipt.transactionHash);
-                window.location.reload()
-            }else{
-                alert("Already claimed or not whitelisted!");
-            }
-        }
+        // Admin Page Side
 
-        async function addWhitelisted() {
-            console.log(address.value, amount.value)
-            let whitelisted = [];
-            whitelisted.push(address.value);
-            let qty = [];
-            qty.push(amount.value);
-            console.log(qty, whitelisted)
+        const companyName = document.getElementById("companyName");
+        const companyAddress = document.getElementById("companyAddress");
+        const addCompanyButton = document.getElementById("addCompanyButton");
+        const companiesList = document.getElementById("companiesList");
+        const showCompaniesList = document.getElementById("showCompaniesList");
+
+        addCompanyButton.addEventListener("click", () => {
+            addCompanyFun();
+        })
+
+        showCompaniesList.addEventListener("click", () => {
+            getCompanies();
+        })
+
+        async function addCompanyFun() {
+            let companyAddr = companyAddress.value;
+            let compName = companyName.value;
+            let sal = salary.value;
             let addr = await signer.getAddress();
             let overrides = {
                 "from": addr
             };
-            let tx = await contractSetter.addToWhitelist(whitelisted, qty, overrides);
+            let tx = await contractSetter.addCompany(companyAddr, compName, overrides);
             let receipt = await tx.wait();
             console.log(receipt.transactionHash);
             alert("Transaction mined : " + receipt.transactionHash);
             window.location.reload()
         }
 
-        async function checkWhitelisted(addr) {
-            let check = await contractGetter._whitelisted(addr);
-            return check;
+        async function getCompanies() {
+            let addr = await signer.getAddress();
+            let supply = await contractGetter.companiesCounter();
+            for (let i = 0; i < supply; i++) {
+                let companyAddr = await contractGetter._companiesList(i);
+                let info = await contractGetter._companiesInfo(companyAddr);
+                let supply = info.employees;
+                let convertedSupply = ethers.BigNumber.from(supply).toString();
+                let row1 = document.createElement("li");
+                let row2 = document.createElement("li");
+                let row3 = document.createElement("li");
+                let lineH = document.createElement("hr");
+                let lineB = document.createElement("br");
+                row1.appendChild(document.createTextNode(`${"Company Name : " + info.name}`));
+                companiesList.appendChild(row1);
+                row2.appendChild(document.createTextNode(`${"Address : " + info.wallet}`));
+                companiesList.appendChild(row2);
+                row3.appendChild(document.createTextNode(`${"N° Employees : " + convertedSupply}`));
+                companiesList.appendChild(row3);
+                companiesList.appendChild(lineH);
+            }
         }
 
-        async function checkPrice(addr) {
-            let price = await contractGetter.price();
-            return ethers.utils.formatUnits(price);
+        // Company Page Side
+
+        const addEmployeeButton = document.getElementById("addEmployeeButton");
+        const wallet = document.getElementById("wallet");
+        const firstName = document.getElementById("fname");
+        const lastName = document.getElementById("lname");
+        const salary = document.getElementById("salary");
+        const employeesList = document.getElementById("employeesList");
+        const showListEmployees = document.getElementById("showListEmployees");
+
+        addEmployeeButton.addEventListener("click", () => {
+            addEmployeeFun();
+        })
+
+        showListEmployees.addEventListener("click", () => {
+            getCompanyEmployees();
+        })
+
+        async function addEmployeeFun() {
+            let wall = wallet.value
+            let fname = firstName.value;
+            let lname = lastName.value;
+            let sal = salary.value;
+            console.log(sal)
+            let addr = await signer.getAddress();
+            let overrides = {
+                "from": addr
+            };
+            let tx = await contractSetter.addEmployee(wall, fname, lname, sal, overrides);
+            let receipt = await tx.wait();
+            console.log(receipt.transactionHash);
+            alert("Transaction mined : " + receipt.transactionHash);
+            window.location.reload()
+        }
+
+        async function getCompanyInfo(addr) {
+            let info = await contractGetter._companiesInfo(addr);
+            let supply = info.employees;
+            let convertedSupply = ethers.BigNumber.from(supply).toString();
+            return convertedSupply;
+        }
+
+        async function getCompanyEmployees() {
+            let addr = await signer.getAddress();
+            let supply = await getCompanyInfo(addr);
+            for (let i = 0; i < supply; i++) {
+                let info = await contractGetter._employeesList(addr, i);
+                console.log(info);
+                console.log(info.firstName);
+                console.log(info.lastName);
+                console.log(info.salary);
+                let row1 = document.createElement("li");
+                let row2 = document.createElement("li");
+                let row3 = document.createElement("li");
+                let row4 = document.createElement("li");
+                let lineH = document.createElement("hr");
+                let lineB = document.createElement("br");
+                row1.appendChild(document.createTextNode(`${"First Name : " + info.firstName}`));
+                employeesList.appendChild(row1);
+                row2.appendChild(document.createTextNode(`${"Last Name : " + info.lastName}`));
+                employeesList.appendChild(row2);
+                row3.appendChild(document.createTextNode(`${"Salary : " + info.salary / 10 ** 18}`));
+                employeesList.appendChild(row3);
+                row4.appendChild(document.createTextNode(`${"Wallet : " + info.wallet}`));
+                employeesList.appendChild(row4);
+                employeesList.appendChild(lineH);
+            }
+        }
+
+        // Employee Page Side
+
+        const days = document.getElementById("days");
+        const addDaysButton = document.getElementById("addDays");
+        const claim = document.getElementById("claim");
+
+        addDaysButton.addEventListener("click", () => {
+            addDaysFun();
+        })
+
+        claim.addEventListener("click", () => {
+            claimFun();
+        })
+        
+        async function addDaysFun() {
+            let daysss = days.value;
+            let addr = await signer.getAddress();
+            let overrides = {
+                "from": addr
+            };
+            let tx = await contractSetter.addDays(daysss, overrides);
+            let receipt = await tx.wait();
+            console.log(receipt.transactionHash);
+            alert("Transaction mined : " + receipt.transactionHash);
+            window.location.reload()
+        }
+
+        async function claimFun() {
+            let addr = await signer.getAddress();
+            let overrides = {
+                "from": addr
+            };
+            let tx = await contractSetter.claimSalary(overrides);
+            let receipt = await tx.wait();
+            console.log(receipt.transactionHash);
+            alert("Transaction mined : " + receipt.transactionHash);
+            window.location.reload()
         }
 
     </script>
