@@ -21,9 +21,7 @@
             <div class="list-group list-group-flush">
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" id="adminSection">Admin</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                    id="employeeSection">Employee</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                    id="companySection">Company</a>
+                    id="userSection">Registration</a>
             </div>
         </div>
         <div id="page-content-wrapper">
@@ -36,69 +34,69 @@
                 <!-- Page content-->
                 <div class="container-fluid">
                     <h1 class="mt-4">Admin</h1>
+                    <button id="showInfo">Show User Informations:</button>
+                    <hr>
+                    <dl id="userInfo"></dl>
                     <h2 class="mt-4">Add Company</h2>
                     <hr>
-
-                    <label for="companyName">Name:</label><br>
-                    <input type="text" id="companyName" name="companyName">
-                    <hr>
-
-                    <label for="address">Address:</label><br>
-                    <input type="text" id="companyAddress" name="companyAddress">
-                    <hr>
-
-                    <button id="addCompanyButton">Submit</button>
-                    <hr>
-                    <h2 class="mt-4">Companies List</h2>
-                    <hr>
-                    <button id="showCompaniesList">Show List</button>
-                    <hr>
-                    <ul id="companiesList"></ul>
+                    <button id="registerUserButton">Register</button>
                 </div>
             </div>
-            <div id="employeePage" style="display:none; text-align: center">
+            <div id="userPage" style="display:none; text-align: center">
                 <!-- Page content-->
                 <div class="container-fluid">
-                    <label for="days">Add Days :</label><br>
-                    <input type="text" id="days" name="days">
-                    <hr>
-                    <button id="addDays">Submit</button>
-                    <hr>
-                    <button id="claim">Claim Salary</button>
-                </div>
-            </div>
-            <div id="companyPage" style="display:none; text-align: center">
-                <!-- Page content-->
-                <div class="container-fluid">
-                    <h1 class="mt-4">Company</h1>
-                    <hr>
-                    <h2 class="mt-4">Add Employee</h2>
-                    <hr>
-                    <label for="wallet">Wallet : </label><br>
-                    <input type="text" id="wallet" name="wallet">
-                    
+                    <h2 class="mt-4">Dati Personali</h2>
                     <hr>
 
-                    <label for="fname">First name:</label><br>
+                    <label for="fname">Nome:</label><br>
                     <input type="text" id="fname" name="fname">
                     <hr>
 
-                    <label for="lname">Last name:</label><br>
+                    <label for="lname">Cognome:</label><br>
                     <input type="text" id="lname" name="lname">
                     <hr>
 
-                    <label for="salary">Salary:</label><br>
-                    <input type="text" id="salary" name="salary">
+                    <label for="cv">Codice Fiscale:</label><br>
+                    <input type="text" id="cv" name="cv">
                     <hr>
 
-                    <button id="addEmployeeButton">Submit</button>
+                    <label for="address">Indirizzo</label><br>
+                    <input type="text" id="address" name="address">
+                    <hr>
+        
+                    <label for="email">Email:</label><br>
+                    <input type="text" id="email" name="email">
                     <hr>
 
-                    <h2 class="mt-4">Employees List</h2>
+                    <label for="wallet">Wallet:</label><br>
+                    <input type="text" id="wallet" name="wallet">
                     <hr>
-                    <button id="showListEmployees">Show List</button>
+
+                    <h2 class="mt-4">Dati Aziendali</h2>
                     <hr>
-                    <ul id="employeesList"></ul>
+
+                    <label for="companyName">Nome:</label><br>
+                    <input type="text" id="companyName" name="companyName">
+                    <hr>
+
+                    <label for="companyAddress">Indirizzo:</label><br>
+                    <input type="text" id="companyAddress" name="companyAddress">
+                    <hr>
+
+                    <label for="iva">Partita IVA:</label><br>
+                    <input type="text" id="iva" name="iva">
+                    <hr>
+
+                    <label for="companyEmail">Email:</label><br>
+                    <input type="text" id="companyEmail" name="companyEmail">
+                    <hr>
+
+                    <label for="paga">Estratto Conto:</label><br>
+                    <input type="text" id="paga" name="paga">
+                    <hr>
+
+                    <button id="submit">Submit</button>
+                    <hr>
                 </div>
             </div>
         </div>
@@ -108,6 +106,7 @@
     <!-- Core theme JS-->
     <script src="js/scripts.js"></script>
     <script type="module">
+
         import { ethers } from "https://cdn.ethers.io/lib/ethers-5.2.esm.min.js";
 
         var account;
@@ -389,29 +388,19 @@
         const contractSetter = new ethers.Contract(contractAddress, contractABI, signer);
 
         const adminPage = document.getElementById("adminPage");
-        const employeePage = document.getElementById("employeePage");
-        const companyPage = document.getElementById("companyPage");
+        const userPage = document.getElementById("userPage");
         const adminSection = document.getElementById("adminSection");
-        const employeeSection = document.getElementById("employeeSection");
-        const companySection = document.getElementById("companySection");
+        const companySection = document.getElementById("userSection");
         const connectButton = document.getElementById("connect");
 
         adminSection.addEventListener("click", () => {
-            employeePage.style.display = "none";
             adminPage.style.display = "block";
-            companyPage.style.display = "none";
-        })
-
-        employeeSection.addEventListener("click", () => {
-            adminPage.style.display = "none";
-            employeePage.style.display = "block";
-            companyPage.style.display = "none";
+            userPage.style.display = "none";
         })
 
         companySection.addEventListener("click", () => {
             adminPage.style.display = "none";
-            employeePage.style.display = "none";
-            companyPage.style.display = "block";
+            userPage.style.display = "block";
         })
 
         connectButton.addEventListener("click", () => {
@@ -426,164 +415,147 @@
 
         // Admin Page Side
 
-        const companyName = document.getElementById("companyName");
-        const companyAddress = document.getElementById("companyAddress");
-        const addCompanyButton = document.getElementById("addCompanyButton");
-        const companiesList = document.getElementById("companiesList");
-        const showCompaniesList = document.getElementById("showCompaniesList");
+        const registerUserButton = document.getElementById("registerUserButton");
+        const showInfo = document.getElementById("showInfo");
+        const userInfo = document.getElementById("userInfo");
 
-        addCompanyButton.addEventListener("click", () => {
-            addCompanyFun();
+        registerUserButton.addEventListener("click", () => {
+            registerUser();
         })
 
-        showCompaniesList.addEventListener("click", () => {
-            getCompanies();
+        showInfo.addEventListener("click", () => {
+            getInfo();
         })
 
-        async function addCompanyFun() {
-            let companyAddr = companyAddress.value;
-            let compName = companyName.value;
-            let sal = salary.value;
-            let addr = await signer.getAddress();
-            let overrides = {
-                "from": addr
-            };
-            let tx = await contractSetter.addCompany(companyAddr, compName, overrides);
-            let receipt = await tx.wait();
-            console.log(receipt.transactionHash);
-            alert("Transaction mined : " + receipt.transactionHash);
-            window.location.reload()
+        async function registerUser() {
         }
 
-        async function getCompanies() {
-            let addr = await signer.getAddress();
-            let supply = await contractGetter.companiesCounter();
-            for (let i = 0; i < supply; i++) {
-                let companyAddr = await contractGetter._companiesList(i);
-                let info = await contractGetter._companiesInfo(companyAddr);
-                let supply = info.employees;
-                let convertedSupply = ethers.BigNumber.from(supply).toString();
-                let row1 = document.createElement("li");
-                let row2 = document.createElement("li");
-                let row3 = document.createElement("li");
-                let lineH = document.createElement("hr");
-                let lineB = document.createElement("br");
-                row1.appendChild(document.createTextNode(`${"Company Name : " + info.name}`));
-                companiesList.appendChild(row1);
-                row2.appendChild(document.createTextNode(`${"Address : " + info.wallet}`));
-                companiesList.appendChild(row2);
-                row3.appendChild(document.createTextNode(`${"N° Employees : " + convertedSupply}`));
-                companiesList.appendChild(row3);
-                companiesList.appendChild(lineH);
-            }
+        async function getInfo() {
+            let info = localStorage.getItem("registration");
+            let parsed = JSON.parse(info);
+            let elem = document.createElement("dt");
+            let bar = document.createElement("br");
+            elem.appendChild(document.createTextNode(`Dati Personali`));
+            userInfo.appendChild(elem).appendChild(bar);
+            elem = document.createElement("dd");
+            bar = document.createElement("br");
+            elem.appendChild(document.createTextNode(`Nome : ${parsed.user_name}`));
+            userInfo.appendChild(bar);
+            userInfo.appendChild(elem)
+            userInfo.appendChild(bar);
+            elem = document.createElement("dd");
+            elem.appendChild(document.createTextNode(`Cognome : ${parsed.user_surname}`));
+            elem = document.createElement("dd");
+            userInfo.appendChild(bar);
+            userInfo.appendChild(elem)
+            userInfo.appendChild(bar);
+            elem = document.createElement("dd");
+            elem.appendChild(document.createTextNode(`Codice Fiscale : ${parsed.fiscal_code}`));
+            userInfo.appendChild(bar);
+            userInfo.appendChild(elem)
+            userInfo.appendChild(bar);
+            elem = document.createElement("dd");
+            elem.appendChild(document.createTextNode(`Indirizzo : ${parsed.address}`));
+            userInfo.appendChild(bar);
+            userInfo.appendChild(elem)
+            userInfo.appendChild(bar);
+            elem = document.createElement("dd");
+            elem.appendChild(document.createTextNode(`Email : ${parsed.email}`));
+            userInfo.appendChild(bar);
+            userInfo.appendChild(elem)
+            userInfo.appendChild(bar);
+            elem = document.createElement("dd");
+            elem.appendChild(document.createTextNode(`Busta Paga : ${parsed.salary}`));
+            userInfo.appendChild(bar);
+            userInfo.appendChild(elem)
+            userInfo.appendChild(bar);
+            elem = document.createElement("dt");
+            bar = document.createElement("br");
+            elem.appendChild(document.createTextNode(`Dati Aziendali`));
+            userInfo.appendChild(bar);
+            userInfo.appendChild(elem)
+            userInfo.appendChild(bar);
+            elem = document.createElement("dd");
+            bar = document.createElement("br");
+            elem.appendChild(document.createTextNode(`Nome : ${parsed.company_name}`));
+            userInfo.appendChild(bar);
+            userInfo.appendChild(elem)
+            userInfo.appendChild(bar);
+            elem = document.createElement("dd");
+            elem.appendChild(document.createTextNode(`Indirizzo : ${parsed.company_address}`));
+            userInfo.appendChild(bar);
+            userInfo.appendChild(elem)
+            userInfo.appendChild(bar);
+            elem = document.createElement("dd");
+            elem.appendChild(document.createTextNode(`Email : ${parsed.company_email}`));
+            userInfo.appendChild(bar);
+            userInfo.appendChild(elem)
+            userInfo.appendChild(bar);
+            elem = document.createElement("dd");
+            elem.appendChild(document.createTextNode(`P. Iva : ${parsed.partita_iva}`));
+            userInfo.appendChild(bar);
+            userInfo.appendChild(elem)
         }
 
-        // Company Page Side
+        // Registration Page Side
 
-        const addEmployeeButton = document.getElementById("addEmployeeButton");
+        // Dati Personali
+
         const wallet = document.getElementById("wallet");
         const firstName = document.getElementById("fname");
         const lastName = document.getElementById("lname");
-        const salary = document.getElementById("salary");
-        const employeesList = document.getElementById("employeesList");
-        const showListEmployees = document.getElementById("showListEmployees");
+        const cv = document.getElementById("cv");
+        const residenza = document.getElementById("address");
+        const userEmail = document.getElementById("email");
+        const paga = document.getElementById("paga");
 
-        addEmployeeButton.addEventListener("click", () => {
-            addEmployeeFun();
+        // Dati Aziendali
+
+        const companyName = document.getElementById("companyName");
+        const companyAddress = document.getElementById("companyAddress");
+        const iva = document.getElementById("iva");
+        const companyEmail = document.getElementById("companyEmail");
+
+        const submit = document.getElementById("submit");
+
+        submit.addEventListener("click", () => {
+            register();
         })
 
-        showListEmployees.addEventListener("click", () => {
-            getCompanyEmployees();
-        })
+        async function register() {
 
-        async function addEmployeeFun() {
+            var json = {}
+
             let wall = wallet.value
             let fname = firstName.value;
             let lname = lastName.value;
-            let sal = salary.value;
-            console.log(sal)
-            let addr = await signer.getAddress();
-            let overrides = {
-                "from": addr
-            };
-            let tx = await contractSetter.addEmployee(wall, fname, lname, sal, overrides);
-            let receipt = await tx.wait();
-            console.log(receipt.transactionHash);
-            alert("Transaction mined : " + receipt.transactionHash);
-            window.location.reload()
-        }
+            let fiscalCode = cv.value;
+            let address = residenza.value
+            let user_email = userEmail.value;
+            let busta_paga = paga.value;   
 
-        async function getCompanyInfo(addr) {
-            let info = await contractGetter._companiesInfo(addr);
-            let supply = info.employees;
-            let convertedSupply = ethers.BigNumber.from(supply).toString();
-            return convertedSupply;
-        }
+            let company_name = companyName.value;
+            let company_address = companyAddress.value;
+            let partita_iva = iva.value
+            let company_email = companyEmail.value;
 
-        async function getCompanyEmployees() {
-            let addr = await signer.getAddress();
-            let supply = await getCompanyInfo(addr);
-            for (let i = 0; i < supply; i++) {
-                let info = await contractGetter._employeesList(addr, i);
-                console.log(info);
-                console.log(info.firstName);
-                console.log(info.lastName);
-                console.log(info.salary);
-                let row1 = document.createElement("li");
-                let row2 = document.createElement("li");
-                let row3 = document.createElement("li");
-                let row4 = document.createElement("li");
-                let lineH = document.createElement("hr");
-                let lineB = document.createElement("br");
-                row1.appendChild(document.createTextNode(`${"First Name : " + info.firstName}`));
-                employeesList.appendChild(row1);
-                row2.appendChild(document.createTextNode(`${"Last Name : " + info.lastName}`));
-                employeesList.appendChild(row2);
-                row3.appendChild(document.createTextNode(`${"Salary : " + info.salary / 10 ** 18}`));
-                employeesList.appendChild(row3);
-                row4.appendChild(document.createTextNode(`${"Wallet : " + info.wallet}`));
-                employeesList.appendChild(row4);
-                employeesList.appendChild(lineH);
-            }
-        }
+            json.wallet = wall
+            json.user_name = fname
+            json.user_surname = lname
+            json.fiscal_code = fiscalCode
+            json.address = address
+            json.email = user_email
+            json.salary = busta_paga
 
-        // Employee Page Side
+            json.company_name = company_name         
+            json.company_address = company_address
+            json.partita_iva = partita_iva
+            json.company_email = company_email
 
-        const days = document.getElementById("days");
-        const addDaysButton = document.getElementById("addDays");
-        const claim = document.getElementById("claim");
+            let obj = JSON.stringify(json)
 
-        addDaysButton.addEventListener("click", () => {
-            addDaysFun();
-        })
+            localStorage.setItem("registration", obj);
 
-        claim.addEventListener("click", () => {
-            claimFun();
-        })
-        
-        async function addDaysFun() {
-            let daysss = days.value;
-            let addr = await signer.getAddress();
-            let overrides = {
-                "from": addr
-            };
-            let tx = await contractSetter.addDays(daysss, overrides);
-            let receipt = await tx.wait();
-            console.log(receipt.transactionHash);
-            alert("Transaction mined : " + receipt.transactionHash);
-            window.location.reload()
-        }
-
-        async function claimFun() {
-            let addr = await signer.getAddress();
-            let overrides = {
-                "from": addr
-            };
-            let tx = await contractSetter.claimSalary(overrides);
-            let receipt = await tx.wait();
-            console.log(receipt.transactionHash);
-            alert("Transaction mined : " + receipt.transactionHash);
-            window.location.reload()
         }
 
     </script>
