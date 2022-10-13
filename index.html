@@ -1,564 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>PayPerDay</title>
-    <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-    <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="css/styles.css" rel="stylesheet" />
-</head>
-
-<body>
-    <div class="d-flex" id="wrapper">
-        <!-- Sidebar-->
-        <div class="border-end bg-white" id="sidebar-wrapper">
-            <div class="sidebar-heading border-bottom bg-light">PayPerDay</div>
-            <div class="list-group list-group-flush">
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" id="adminSection">Admin</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                    id="userSection">Registration</a>
-            </div>
-        </div>
-        <div id="page-content-wrapper">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-                <div class="container-fluid">
-                    <button class="btn btn-primary" id="connect">Connect</button>
-                </div>
-            </nav>
-            <div id="adminPage" style="display:none; text-align: center">
-                <!-- Page content-->
-                <div class="container-fluid">
-                    <h1 class="mt-4">Admin</h1>
-                    <button id="showInfo">Show User Informations:</button>
-                    <hr>
-                    <dl id="userInfo"></dl>
-                    <h2 class="mt-4">Add Company</h2>
-                    <hr>
-                    <button id="registerUserButton">Register</button>
-                </div>
-            </div>
-            <div id="userPage" style="display:none; text-align: center">
-                <!-- Page content-->
-                <div class="container-fluid">
-                    <h2 class="mt-4">Dati Personali</h2>
-                    <hr>
-
-                    <label for="fname">Nome:</label><br>
-                    <input type="text" id="fname" name="fname">
-                    <hr>
-
-                    <label for="lname">Cognome:</label><br>
-                    <input type="text" id="lname" name="lname">
-                    <hr>
-
-                    <label for="cv">Codice Fiscale:</label><br>
-                    <input type="text" id="cv" name="cv">
-                    <hr>
-
-                    <label for="address">Indirizzo</label><br>
-                    <input type="text" id="address" name="address">
-                    <hr>
-        
-                    <label for="email">Email:</label><br>
-                    <input type="text" id="email" name="email">
-                    <hr>
-
-                    <label for="wallet">Wallet:</label><br>
-                    <input type="text" id="wallet" name="wallet">
-                    <hr>
-
-                    <h2 class="mt-4">Dati Aziendali</h2>
-                    <hr>
-
-                    <label for="companyName">Nome:</label><br>
-                    <input type="text" id="companyName" name="companyName">
-                    <hr>
-
-                    <label for="companyAddress">Indirizzo:</label><br>
-                    <input type="text" id="companyAddress" name="companyAddress">
-                    <hr>
-
-                    <label for="iva">Partita IVA:</label><br>
-                    <input type="text" id="iva" name="iva">
-                    <hr>
-
-                    <label for="companyEmail">Email:</label><br>
-                    <input type="text" id="companyEmail" name="companyEmail">
-                    <hr>
-
-                    <label for="paga">Estratto Conto:</label><br>
-                    <input type="text" id="paga" name="paga">
-                    <hr>
-
-                    <button id="submit">Submit</button>
-                    <hr>
-                </div>
-            </div>
-        </div>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FantaCrypto</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <h1 style="text-align: center;">Welcome to FantaCrypto!</h1>
+    <hr>
+    <div style="text-align: center;">
+      <button id="connect_wallet" type="button" class="btn btn-primary">Connect Wallet</button>
     </div>
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS-->
-    <script src="js/scripts.js"></script>
-    <script type="module">
-
-        import { ethers } from "https://cdn.ethers.io/lib/ethers-5.2.esm.min.js";
-
-        var account;
-
-        ethereum.on("accountsChanged", (newAccount) => {
-            account = newAccount;
-            connectButton.innerText = account;
-        });
-
-        // A Web3Provider wraps a standard Web3 provider, which is
-        // what MetaMask injects as window.ethereum into each page
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-
-        // The MetaMask plugin also allows signing transactions to
-        // send ether and pay to change state within the blockchain.
-        // For this, you need the account signer...
-        const signer = provider.getSigner();
-
-        const contractABI =
-            [
-                {
-                    "inputs": [
-                        {
-                            "internalType": "uint256",
-                            "name": "amount",
-                            "type": "uint256"
-                        }
-                    ],
-                    "name": "addDays",
-                    "outputs": [],
-                    "stateMutability": "nonpayable",
-                    "type": "function"
-                },
-                {
-                    "inputs": [],
-                    "name": "companiesCounter",
-                    "outputs": [
-                        {
-                            "internalType": "uint256",
-                            "name": "",
-                            "type": "uint256"
-                        }
-                    ],
-                    "stateMutability": "view",
-                    "type": "function"
-                },
-                {
-                    "inputs": [
-                        {
-                            "internalType": "uint256",
-                            "name": "",
-                            "type": "uint256"
-                        }
-                    ],
-                    "name": "_companiesList",
-                    "outputs": [
-                        {
-                            "internalType": "address",
-                            "name": "",
-                            "type": "address"
-                        }
-                    ],
-                    "stateMutability": "view",
-                    "type": "function"
-                },
-                {
-                    "inputs": [
-                        {
-                            "internalType": "address",
-                            "name": "",
-                            "type": "address"
-                        }
-                    ],
-                    "name": "_companiesInfo",
-                    "outputs": [
-                        {
-                            "internalType": "string",
-                            "name": "name",
-                            "type": "string"
-                        },
-                        {
-                            "internalType": "address",
-                            "name": "wallet",
-                            "type": "address"
-                        },
-                        {
-                            "internalType": "uint256",
-                            "name": "employees",
-                            "type": "uint256"
-                        }
-                    ],
-                    "stateMutability": "view",
-                    "type": "function"
-                },
-                {
-                    "inputs": [
-                        {
-                            "internalType": "address",
-                            "name": "",
-                            "type": "address"
-                        }
-                    ],
-                    "name": "_employeesInfo",
-                    "outputs": [
-                        {
-                            "internalType": "address",
-                            "name": "company",
-                            "type": "address"
-                        },
-                        {
-                            "internalType": "string",
-                            "name": "firstName",
-                            "type": "string"
-                        },
-                        {
-                            "internalType": "string",
-                            "name": "lastName",
-                            "type": "string"
-                        },
-                        {
-                            "internalType": "uint256",
-                            "name": "salary",
-                            "type": "uint256"
-                        },
-                        {
-                            "internalType": "uint256",
-                            "name": "startDate",
-                            "type": "uint256"
-                        }
-                    ],
-                    "stateMutability": "view",
-                    "type": "function"
-                },
-                {
-                    "inputs": [
-                        {
-                            "internalType": "address",
-                            "name": "wallet",
-                            "type": "address"
-                        },
-                        {
-                            "internalType": "string",
-                            "name": "name",
-                            "type": "string"
-                        }
-                    ],
-                    "name": "addCompany",
-                    "outputs": [],
-                    "stateMutability": "nonpayable",
-                    "type": "function"
-                },
-                {
-                    "inputs": [
-                        {
-                            "internalType": "address",
-                            "name": "wallet",
-                            "type": "address"
-                        },
-                        {
-                            "internalType": "string",
-                            "name": "firstName",
-                            "type": "string"
-                        },
-                        {
-                            "internalType": "string",
-                            "name": "lastName",
-                            "type": "string"
-                        },
-                        {
-                            "internalType": "uint256",
-                            "name": "salary",
-                            "type": "uint256"
-                        }
-                    ],
-                    "name": "addEmployee",
-                    "outputs": [],
-                    "stateMutability": "nonpayable",
-                    "type": "function"
-                },
-                {
-                    "inputs": [
-                        {
-                            "internalType": "address",
-                            "name": "account",
-                            "type": "address"
-                        }
-                    ],
-                    "name": "balanceOf",
-                    "outputs": [
-                        {
-                            "internalType": "uint256",
-                            "name": "",
-                            "type": "uint256"
-                        }
-                    ],
-                    "stateMutability": "view",
-                    "type": "function"
-                },
-                {
-                    "inputs": [],
-                    "name": "claimSalary",
-                    "outputs": [],
-                    "stateMutability": "nonpayable",
-                    "type": "function"
-                },
-                {
-                    "inputs": [
-                        {
-                            "internalType": "address",
-                            "name": "spender",
-                            "type": "address"
-                        },
-                        {
-                            "internalType": "uint256",
-                            "name": "addedValue",
-                            "type": "uint256"
-                        }
-                    ],
-                    "name": "increaseAllowance",
-                    "outputs": [
-                        {
-                            "internalType": "bool",
-                            "name": "",
-                            "type": "bool"
-                        }
-                    ],
-                    "stateMutability": "nonpayable",
-                    "type": "function"
-                },
-                {
-                    "inputs": [
-                        {
-                            "internalType": "address",
-                            "name": "",
-                            "type": "address"
-                        },
-                        {
-                            "internalType": "uint256",
-                            "name": "",
-                            "type": "uint256"
-                        }
-                    ],
-                    "name": "_employeesList",
-                    "outputs": [
-                        {
-                            "internalType": "address",
-                            "name": "company",
-                            "type": "address"
-                        },
-                        {
-                            "internalType": "string",
-                            "name": "firstName",
-                            "type": "string"
-                        },
-                        {
-                            "internalType": "string",
-                            "name": "lastName",
-                            "type": "string"
-                        },
-                        {
-                            "internalType": "uint256",
-                            "name": "salary",
-                            "type": "uint256"
-                        },
-                        {
-                            "internalType": "uint256",
-                            "name": "startDate",
-                            "type": "uint256"
-                        }
-                    ],
-                    "stateMutability": "view",
-                    "type": "function"
-                }
-            ]
-
-        const contractAddress = "0x675Ff84eF835d902a08CD49A2e94556974ab6093";
-
-        const contractGetter = new ethers.Contract(contractAddress, contractABI, provider);
-        const contractSetter = new ethers.Contract(contractAddress, contractABI, signer);
-
-        const adminPage = document.getElementById("adminPage");
-        const userPage = document.getElementById("userPage");
-        const adminSection = document.getElementById("adminSection");
-        const companySection = document.getElementById("userSection");
-        const connectButton = document.getElementById("connect");
-
-        adminSection.addEventListener("click", () => {
-            adminPage.style.display = "block";
-            userPage.style.display = "none";
-        })
-
-        companySection.addEventListener("click", () => {
-            adminPage.style.display = "none";
-            userPage.style.display = "block";
-        })
-
-        connectButton.addEventListener("click", () => {
-            connect();
-        })
-
-        async function connect() {
-            // MetaMask requires requesting permission to connect users accounts
-            account = await provider.send("eth_requestAccounts", []);
-            connectButton.innerText = account;
-        }
-
-        // Admin Page Side
-
-        const registerUserButton = document.getElementById("registerUserButton");
-        const showInfo = document.getElementById("showInfo");
-        const userInfo = document.getElementById("userInfo");
-
-        registerUserButton.addEventListener("click", () => {
-            registerUser();
-        })
-
-        showInfo.addEventListener("click", () => {
-            getInfo();
-        })
-
-        async function registerUser() {
-        }
-
-        async function getInfo() {
-            let info = localStorage.getItem("registration");
-            let parsed = JSON.parse(info);
-            let elem = document.createElement("dt");
-            let bar = document.createElement("br");
-            elem.appendChild(document.createTextNode(`Dati Personali`));
-            userInfo.appendChild(elem).appendChild(bar);
-            elem = document.createElement("dd");
-            bar = document.createElement("br");
-            elem.appendChild(document.createTextNode(`Nome : ${parsed.user_name}`));
-            userInfo.appendChild(bar);
-            userInfo.appendChild(elem)
-            userInfo.appendChild(bar);
-            elem = document.createElement("dd");
-            elem.appendChild(document.createTextNode(`Cognome : ${parsed.user_surname}`));
-            elem = document.createElement("dd");
-            userInfo.appendChild(bar);
-            userInfo.appendChild(elem)
-            userInfo.appendChild(bar);
-            elem = document.createElement("dd");
-            elem.appendChild(document.createTextNode(`Codice Fiscale : ${parsed.fiscal_code}`));
-            userInfo.appendChild(bar);
-            userInfo.appendChild(elem)
-            userInfo.appendChild(bar);
-            elem = document.createElement("dd");
-            elem.appendChild(document.createTextNode(`Indirizzo : ${parsed.address}`));
-            userInfo.appendChild(bar);
-            userInfo.appendChild(elem)
-            userInfo.appendChild(bar);
-            elem = document.createElement("dd");
-            elem.appendChild(document.createTextNode(`Email : ${parsed.email}`));
-            userInfo.appendChild(bar);
-            userInfo.appendChild(elem)
-            userInfo.appendChild(bar);
-            elem = document.createElement("dd");
-            elem.appendChild(document.createTextNode(`Busta Paga : ${parsed.salary}`));
-            userInfo.appendChild(bar);
-            userInfo.appendChild(elem)
-            userInfo.appendChild(bar);
-            elem = document.createElement("dt");
-            bar = document.createElement("br");
-            elem.appendChild(document.createTextNode(`Dati Aziendali`));
-            userInfo.appendChild(bar);
-            userInfo.appendChild(elem)
-            userInfo.appendChild(bar);
-            elem = document.createElement("dd");
-            bar = document.createElement("br");
-            elem.appendChild(document.createTextNode(`Nome : ${parsed.company_name}`));
-            userInfo.appendChild(bar);
-            userInfo.appendChild(elem)
-            userInfo.appendChild(bar);
-            elem = document.createElement("dd");
-            elem.appendChild(document.createTextNode(`Indirizzo : ${parsed.company_address}`));
-            userInfo.appendChild(bar);
-            userInfo.appendChild(elem)
-            userInfo.appendChild(bar);
-            elem = document.createElement("dd");
-            elem.appendChild(document.createTextNode(`Email : ${parsed.company_email}`));
-            userInfo.appendChild(bar);
-            userInfo.appendChild(elem)
-            userInfo.appendChild(bar);
-            elem = document.createElement("dd");
-            elem.appendChild(document.createTextNode(`P. Iva : ${parsed.partita_iva}`));
-            userInfo.appendChild(bar);
-            userInfo.appendChild(elem)
-        }
-
-        // Registration Page Side
-
-        // Dati Personali
-
-        const wallet = document.getElementById("wallet");
-        const firstName = document.getElementById("fname");
-        const lastName = document.getElementById("lname");
-        const cv = document.getElementById("cv");
-        const residenza = document.getElementById("address");
-        const userEmail = document.getElementById("email");
-        const paga = document.getElementById("paga");
-
-        // Dati Aziendali
-
-        const companyName = document.getElementById("companyName");
-        const companyAddress = document.getElementById("companyAddress");
-        const iva = document.getElementById("iva");
-        const companyEmail = document.getElementById("companyEmail");
-
-        const submit = document.getElementById("submit");
-
-        submit.addEventListener("click", () => {
-            register();
-        })
-
-        async function register() {
-
-            var json = {}
-
-            let wall = wallet.value
-            let fname = firstName.value;
-            let lname = lastName.value;
-            let fiscalCode = cv.value;
-            let address = residenza.value
-            let user_email = userEmail.value;
-            let busta_paga = paga.value;   
-
-            let company_name = companyName.value;
-            let company_address = companyAddress.value;
-            let partita_iva = iva.value
-            let company_email = companyEmail.value;
-
-            json.wallet = wall
-            json.user_name = fname
-            json.user_surname = lname
-            json.fiscal_code = fiscalCode
-            json.address = address
-            json.email = user_email
-            json.salary = busta_paga
-
-            json.company_name = company_name         
-            json.company_address = company_address
-            json.partita_iva = partita_iva
-            json.company_email = company_email
-
-            let obj = JSON.stringify(json)
-
-            localStorage.setItem("registration", obj);
-
-        }
-
-    </script>
-</body>
-
+    <hr>
+    <div style="text-align: center;">
+      <button style="display: none;" id="register_player" type="button" class="btn btn-primary"></button>
+    </div>
+    <hr>
+    <div id="all_players" style="display: none; text-align: center;">
+      <h2>PORTIERI</h2>
+      <div id="goalkeepers_all_players"></div>
+      <h2>DIFENSORI</h2>
+      <div id="defenders_all_players"></div>
+      <h2>CENTROCAMPISTI</h2>
+      <div id="midfielders_all_players"></div>
+      <h2>ATTACCANTI</h2>
+      <div id="strikers_all_players"></div>
+    </div>
+    <hr>
+    <div style="text-align: center;">
+      <button style="display: none;" id="create_team" type="button" class="btn btn-primary">CREATE</button>
+    </div>
+    <hr>
+    <div style="text-align: center;">
+      <button style="display: none;" id="show_balance" type="button" class="btn btn-primary">SHOW BALANCE</button>
+    </div>
+    <hr>
+    <div style="text-align: center;">
+      <button style="display: none;" id="show_team" type="button" class="btn btn-primary">SHOW TEAM</button>
+    </div>
+    <hr>
+    <div id="team_players" style="display: none; text-align: center;">
+      <h3>PORTIERI</h3>
+      <div id="goalkeepers_team"></div>
+      <h3>DIFENSORI</h3>
+      <div id="defenders_team"></div>
+      <h3>CENTROCAMPISTI</h3>
+      <div id="midfielders_team"></div>
+      <h3>ATTACCANTI</h3>
+      <div id="strikers_team"></div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+  <script
+    src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+    type="application/javascript"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"
+    integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk"
+    crossorigin="anonymous"
+  ></script>
+  <script src="./web3.js"></script>
 </html>
