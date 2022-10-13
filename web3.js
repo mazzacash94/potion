@@ -603,8 +603,7 @@ async function connectWallet() {
     connectBtn.disabled = true;
     contractInit();
     showRegistration();
-    showTeamButton();
-	showBalanceButton();
+    showBalanceButton();
   }
 }
 
@@ -1248,44 +1247,41 @@ function showTeamButton() {
 }
 
 function showBalanceButton() {
-	showBalanceBtn.style.display = "block";
-	showBalanceBtn.addEventListener("click", () => showBalance())
+  showBalanceBtn.style.display = "block";
+  showBalanceBtn.addEventListener("click", () => showBalance());
 }
 
-async function showBalance(){
-	let balance = await contractGetter.getPlayerBudget({from : address});
-	showBalanceBtn.innerHTML = `${balance} MLN`;
-	showBalanceBtn.disabled = true;
+async function showBalance() {
+  let balance = await contractGetter.getPlayerBudget({ from: address });
+  showBalanceBtn.innerHTML = `${balance} MLN`;
+  showBalanceBtn.disabled = true;
 }
 
 async function showTeam() {
-  
   let team = await contractGetter.getPlayerTeam({ from: address });
-  if(team[0].length == 0){
-	alert("Team ancora non creato!");
-  }else{
-	showTeamBtn.disabled = true;
-	teamPlayers.style.display = "block";  
-	for (let i = 0; i < team.length; i++) {
-    for (let j = 0; j < team[i].length; j++) {
-      let player = document.createElement("p");
-      player.innerHTML = players[team[i][j]].name;
-      let space = document.createElement("br");
-      if (i == 0) {
-        //let space = document.createElement("br");
-        goalkeepersTeam.appendChild(player);
-        //allPlayers.appendChild(space);
-      } else if (i == 1) {
-        defendersTeam.appendChild(player);
-      } else if (i == 2) {
-        midfieldersTeam.appendChild(player);
-      } else {
-        strikersTeam.appendChild(player);
+  if (team[0].length == 0) {
+    alert("Team ancora non creato!");
+  } else {
+    showTeamBtn.disabled = true;
+    teamPlayers.style.display = "block";
+    for (let i = 0; i < team.length; i++) {
+      for (let j = 0; j < team[i].length; j++) {
+        let player = document.createElement("p");
+        player.innerHTML = players[team[i][j]].name;
+        if (i == 0) {
+          //let space = document.createElement("br");
+          goalkeepersTeam.appendChild(player);
+          //allPlayers.appendChild(space);
+        } else if (i == 1) {
+          defendersTeam.appendChild(player);
+        } else if (i == 2) {
+          midfieldersTeam.appendChild(player);
+        } else {
+          strikersTeam.appendChild(player);
+        }
       }
     }
   }
-  }
-
 }
 
 async function showRegistration() {
@@ -1295,8 +1291,6 @@ async function showRegistration() {
     registerBtn.style.display = "block";
     registerBtn.disabled = true;
     registerBtn.innerHTML = "REGISTERED";
-    createTeamBtn.style.display = "block";
-    createTeamBtn.addEventListener("click", () => createTeam());
     showAllPlayers();
   } else {
     registerBtn.style.display = "block";
@@ -1305,67 +1299,81 @@ async function showRegistration() {
   }
 }
 
-function showAllPlayers() {
-  allPlayers.style.display = "block";
-  for (let i = 0; i < 554; i++) {
-    let btn = document.createElement("button");
-    btn.classList.add("btn");
-    btn.classList.add("btn-primary");
-    btn.value = i;
-    btn.style.marginLeft = "10px";
-    btn.style.marginTop = "10px";
-    btn.style.marginBottom = "10px";
-    btn.innerHTML = `${players[i].name} - ${players[i].price} MLN`;
-    btn.addEventListener("click", () => {
+async function checkTeamCreation() {
+  let team = await contractGetter.getPlayerTeam({ from: address });
+  if (team[0].length == 0) {
+  }
+}
+
+async function showAllPlayers() {
+  let team = await contractGetter.getPlayerTeam({ from: address });
+  if (team[0].length == 0) {
+    createTeamBtn.style.display = "block";
+    createTeamBtn.addEventListener("click", () => createTeam());
+    allPlayers.style.display = "block";
+    for (let i = 0; i < 554; i++) {
+      let btn = document.createElement("button");
+      btn.classList.add("btn");
+      btn.classList.add("btn-primary");
+      btn.value = i;
+      btn.style.marginLeft = "10px";
+      btn.style.marginTop = "10px";
+      btn.style.marginBottom = "10px";
+      btn.innerHTML = `${players[i].name} - ${players[i].price} MLN`;
+      btn.addEventListener("click", () => {
+        if (i < 64) {
+          if (selectedGoalkeepers.length > 2) {
+            alert("Massimo per ruolo gia raggiunto!");
+          } else {
+            selectedGoalkeepers.push(i);
+            totalPrice += players[i].price;
+            btn.disabled = true;
+            console.log(totalPrice);
+          }
+        } else if (i >= 64 && i < 264) {
+          if (selectedDefenders.length > 7) {
+            alert("Massimo per ruolo gia raggiunto!");
+          } else {
+            selectedDefenders.push(i);
+            totalPrice += players[i].price;
+            btn.disabled = true;
+            console.log(totalPrice);
+          }
+        } else if (i >= 264 && i < 454) {
+          if (selectedMidfielders.length > 7) {
+            alert("Massimo per ruolo gia raggiunto!");
+          } else {
+            selectedMidfielders.push(i);
+            totalPrice += players[i].price;
+            btn.disabled = true;
+            console.log(totalPrice);
+          }
+        } else {
+          if (selectedStrikers.length > 5) {
+            alert("Massimo per ruolo gia raggiunto!");
+          } else {
+            selectedStrikers.push(i);
+            totalPrice += players[i].price;
+            btn.disabled = true;
+            console.log(totalPrice);
+          }
+        }
+      });
       if (i < 64) {
-        if (selectedGoalkeepers.length > 2) {
-          alert("Massimo per ruolo gia raggiunto!");
-        } else {
-          selectedGoalkeepers.push(i);
-		  totalPrice += players[i].price;
-		  btn.disabled = true;
-		  console.log(totalPrice);
-        }
+        //let space = document.createElement("br");
+        goalkeepersPlayers.appendChild(btn);
+        //allPlayers.appendChild(space);
       } else if (i >= 64 && i < 264) {
-        if (selectedDefenders.length > 7) {
-          alert("Massimo per ruolo gia raggiunto!");
-        } else {
-          selectedDefenders.push(i);
-		  totalPrice += players[i].price;
-		  btn.disabled = true;
-		  console.log(totalPrice);
-        }
+        defendersPlayers.appendChild(btn);
       } else if (i >= 264 && i < 454) {
-        if (selectedMidfielders.length > 7) {
-          alert("Massimo per ruolo gia raggiunto!");
-        } else {
-          selectedMidfielders.push(i);
-		  totalPrice += players[i].price;
-		  btn.disabled = true;
-		  console.log(totalPrice);
-        }
+        midfieldersPlayers.appendChild(btn);
       } else {
-        if (selectedStrikers.length > 5) {
-          alert("Massimo per ruolo gia raggiunto!");
-        } else {
-          selectedStrikers.push(i);
-		  totalPrice += players[i].price;
-		  btn.disabled = true;
-		  console.log(totalPrice);
-        }
+        strikersPlayers.appendChild(btn);
       }
-    });
-    if (i < 64) {
-      //let space = document.createElement("br");
-      goalkeepersPlayers.appendChild(btn);
-      //allPlayers.appendChild(space);
-    } else if (i >= 64 && i < 264) {
-      defendersPlayers.appendChild(btn);
-    } else if (i >= 264 && i < 454) {
-      midfieldersPlayers.appendChild(btn);
-    } else {
-      strikersPlayers.appendChild(btn);
     }
+  } else {
+    showTeamButton();
+    console.log("Already created!");
   }
 }
 
