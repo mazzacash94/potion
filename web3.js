@@ -1299,12 +1299,6 @@ async function showRegistration() {
   }
 }
 
-async function checkTeamCreation() {
-  let team = await contractGetter.getPlayerTeam({ from: address });
-  if (team[0].length == 0) {
-  }
-}
-
 async function showAllPlayers() {
   let team = await contractGetter.getPlayerTeam({ from: address });
   if (team[0].length == 0) {
@@ -1377,6 +1371,10 @@ async function showAllPlayers() {
   }
 }
 
+function hideAllPlayers() {
+  allPlayers.style.display = "none";
+  createTeamBtn.style.display = "none";
+}
 // CONTRACT FUNCTIONS
 
 // GETTERS
@@ -1387,13 +1385,18 @@ async function checkRegistration() {
 
 // SETTERS
 async function registerPlayer() {
-  let overrides = {
-    from: await signer.getAddress(),
-    value: ethers.utils.parseEther("0.1"),
-  };
-  let tx = await contractSetter.registerPlayer(overrides);
-  let receipt = await tx.wait();
-  return receipt.transactionHash;
+  try {
+    let overrides = {
+      from: await signer.getAddress(),
+      value: ethers.utils.parseEther("0.1"),
+    };
+    let tx = await contractSetter.registerPlayer(overrides);
+    let receipt = await tx.wait();
+    setTimeout(() => checkRegistration(), 5000);
+    return receipt.transactionHash;
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 async function createTeam() {
@@ -1412,5 +1415,10 @@ async function createTeam() {
     overrides
   );
   let receipt = await tx.wait();
+  setTimeout(() => {
+    hideAllPlayers();
+    showAllPlayers();
+  }, 5000);
+
   return receipt.transactionHash;
 }
