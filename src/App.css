@@ -1,0 +1,411 @@
+/* Global Styles */
+@import url('https://fonts.googleapis.com/css?family=Fredoka+One');
+
+:root {
+	--primary-color: #17a2b8;
+	--dark-color: #343a40;
+	--light-color: #f4f4f4;
+	--danger-color: #dc3545;
+	--success-color: #28a745;
+}
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: 'Fredoka One', sans-serif;
+	font-size: 1rem;
+	line-height: 1.6;
+	background-color: #fff;
+	color: #333;
+}
+
+.main,
+.craft {
+	background-color: black;
+	width: 100vw;
+	height: 100vh;
+}
+
+.background {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+}
+
+.main .background img {
+	width: 100%;
+	height: auto;
+}
+
+.craft .background img {
+	width: 100%;
+	height: 100%;
+	max-width: 100%;
+	max-height: 100%;
+}
+
+.absolute {
+	position: absolute;
+}
+
+.z-10 {
+	z-index: 10;
+}
+
+.w-full {
+	width: 100%;
+}
+
+.pos-center {
+	top: 50%;
+	left: 50%;
+	--tw-translate-x: 0;
+	--tw-translate-y: 0;
+	--tw-translate-z: 0;
+	--tw-rotate: 0;
+	--tw-rotate-x: 0;
+	--tw-rotate-y: 0;
+	--tw-rotate-z: 0;
+	--tw-skew-x: 0;
+	--tw-skew-y: 0;
+	--tw-scale-x: 1;
+	--tw-scale-y: 1;
+	--tw-scale-z: 1;
+	-webkit-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y)) translateZ(var(--tw-translate-z)) rotate(var(--tw-rotate)) rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate-z)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) scaleZ(var(--tw-scale-z));
+	-ms-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y)) translateZ(var(--tw-translate-z)) rotate(var(--tw-rotate)) rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotateZ(var(--tw-rotate-z)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) scaleZ(var(--tw-scale-z));
+	transform: translate(var(--tw-translate-x)) translateY(var(--tw-translate-y)) translateZ(var(--tw-translate-z)) rotate(var(--tw-rotate)) rotateX(var(--tw-rotate-x)) rotateY(var(--tw-rotate-y)) rotate(var(--tw-rotate-z)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) scaleZ(var(--tw-scale-z));
+	--tw-translate-x: -50%;
+	--tw-translate-y: -50%;
+}
+
+svg {
+	display: block;
+	vertical-align: middle;
+}
+
+.hoverDlg {
+	position: absolute;
+}
+
+.hoverDlg .dialog {
+	width: 440px;
+	height: auto;
+	border-radius: 10px;
+	border: 4px solid #FFFFFF;
+}
+
+.hoverDlg .polygon {
+	position: absolute;
+	bottom: -35px;
+	right: 20px;
+}
+
+.cursor-pointer {
+	cursor: pointer;
+}
+
+.craft .background .mask {
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.55);
+	backdrop-filter: blur(2.5px);
+	position: absolute;
+}
+
+.craft .main-content {
+	position: relative;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	padding: 20px;
+}
+
+.craft .main-content .header {
+	display: flex;
+	justify-content: space-between;
+}
+
+.button {
+	display: flex;
+	padding-left: 10px;
+	padding-right: 10px;
+	/* height: 70px; */
+	background-color: white;
+	border-radius: 5px;
+	font-style: normal;
+	font-weight: 400;
+	height: 35px;
+	font-size: 20px;
+	line-height: 30px;
+	text-transform: uppercase;
+	align-items: center;
+	justify-content: center;
+}
+
+.button img {
+	margin-right: 10px;
+	height: 80%;
+}
+
+.craft .content {
+	margin-top: 50px;
+	margin-bottom: 120px;
+	height: calc(100% - 170px);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.craft .content .NFTList:first-child {
+	margin-right: 40px;
+}
+
+.NFTList {
+	background: rgba(255, 255, 255, 0.2);
+	border: 4px solid #FFFFFF;
+	backdrop-filter: blur(10px);
+	width: 450px;
+	border-radius: 25px;
+	padding: 20px 15px;
+	display: flex;
+	flex-wrap: wrap;
+	overflow-y: scroll;
+	align-items: baseline;
+	height: 100%;
+	justify-content: space-between;
+}
+
+.NFTList::-webkit-scrollbar {
+	display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.NFTList {
+	-ms-overflow-style: none;
+	/* IE and Edge */
+	scrollbar-width: none;
+	/* Firefox */
+}
+
+.craftbtn {
+	background: #FF5A32;
+	color: white;
+	width: 200px;
+	position: absolute;
+	bottom: 35px;
+	left: calc(50% - 100px);
+}
+
+.NFTItem {
+	background: black;
+	width: 180px;
+	border-radius: 20px;
+	margin-bottom: 20px;
+}
+
+.NFTItem:nth-child(odd) {
+	margin-right: 20px;
+}
+
+.NFTItem .title {
+	font-weight: 400;
+	font-size: 18px;
+	line-height: 30px;
+	/* identical to box height, or 120% */
+
+	text-align: center;
+	text-transform: uppercase;
+	margin-top: 12px;
+	color: #FFFFFF;
+}
+
+.NFTItem img {
+	border-radius: 20px 20px 0px 0px;
+	width: calc(100% - 20px);
+	margin-top: 8px;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.NFTItem .selectbtn {
+	background: #FFFFFF;
+	border-radius: 0px 0px 20px 20px;
+	color: black;
+	height: 50px;
+	font-weight: 400;
+	font-size: 25px;
+	line-height: 30px;
+	/* identical to box height, or 120% */
+	margin-top: -7px;
+	text-align: center;
+	text-transform: uppercase;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.NFTItem .selectbtn.selected {
+	color: white;
+	background: #FF5A32;
+}
+
+.button.disabled {
+	background: #FFFFFF;
+	color: #D4D6E4;
+	cursor: no-drop;
+}
+
+.content .videoTag {
+	overflow: hidden;
+	border: 5px solid #FFFFFF;
+	border-radius: 25px;
+	position: relative;
+	width: 1250px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.content .videoTag video.backgroundimg {
+	border-radius: 25px;
+	top: 0px;
+	width: 100%
+}
+
+.content .videoTag .mask {
+	background: rgba(0, 0, 0, 0.45);
+	backdrop-filter: blur(3px);
+	/* Note: backdrop-filter has minimal browser support */
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	border-radius: 25px;
+	position: absolute;
+}
+
+.hover\:stroke-primary\/70:hover {
+	--tw-stroke-opacity: .7;
+	stroke: rgba(255, 255, 255, var(--tw-stroke-opacity));
+}
+
+.hover\:fill-primary\/30:hover {
+	--tw-fill-opacity: .3;
+	fill: rgba(255, 255, 255, var(--tw-fill-opacity));
+}
+
+.closeBtn {
+	top: 10px;
+	right: 10px;
+}
+
+.mobile .main .background {
+	overflow: hidden;
+}
+
+.mobile .main>svg {
+	display: none;
+}
+
+.mobile .main .background img {
+	height: 100%;
+	width: auto;
+	right: -200px;
+	position: absolute;
+}
+
+.explorerbtn {
+	position: absolute;
+	bottom: 0px;
+	width: calc(100% - 40px);
+	margin: 20px;
+	height: 50px;
+	color: white;
+	background-color: #FF5A32;
+}
+
+.mobile .hoverDlg {
+	width: 60%;
+	
+}
+
+.mobile .hoverDlg .dialog {
+	width: 100%;
+}
+
+.mobile .hoverDlg .polygon {
+	width: 30px;
+	height: auto;
+	bottom: -15px;
+}
+
+.mobile .button img {
+	margin-right: 0px;
+}
+
+.mobile .craft {
+	height: inherit;
+	position: relative;
+}
+
+.mobile .craft .background {
+	width: inherit;
+	height: 100%;
+	overflow: hidden;
+}
+
+.mobile .craft .content {
+	flex-direction: column;
+}
+
+.mobile .craft .background img {
+	height: 100%;
+	width: auto;
+	max-width: inherit;
+	max-height: inherit;
+}
+
+.mobile .craft .main-content {
+	height: auto;
+	overflow-y: scroll;
+	min-height: 100vh;
+}
+
+.mobile .NFTList {
+	width: 100%;
+	margin: auto;
+	border: 2px solid #FFFFFF;
+	border-radius: 10px;
+	padding: 10px;
+}
+
+.mobile .NFTItem {
+	width: 48%;
+}
+
+.mobile .NFTItem:nth-child(odd) {
+	margin-right: 0px;
+}
+
+.mobile .craft .content .NFTList:first-child {
+	margin-bottom: 30px;
+}
+
+.mobile .NFTItem .title {
+	font-size: 15px;
+}
+
+.mobile .content .videoTag {
+	width: 100%;
+	border: 2px solid white;
+}
+
+.mobile .craft .content {
+	height: 100%;
+}
